@@ -1,0 +1,55 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+
+int _ResultWidth;
+int _ResultHeight;
+
+[numthreads(1,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _ResultWidth || id.y >= _ResultHeight) return;
+    
+    const float2 p0 = id.xy * 3;
+    const float2 p1 = p0 + float2(1, 0);
+    const float2 p2 = p0 + float2(2, 0);
+    const float2 p3 = p0 + float2(0, 1);
+    const float2 p4 = p0 + float2(1, 1);
+    const float2 p5 = p0 + float2(2, 1);
+    const float2 p6 = p0 + float2(0, 2);
+    const float2 p7 = p0 + float2(1, 2);
+    const float2 p8 = p0 + float2(2, 2);
+
+    const float p1Enabled = p1.x < _ResultWidth && p1.y < _ResultHeight ? 1.0 : 0.0;
+    const float p2Enabled = p2.x < _ResultWidth && p2.y < _ResultHeight ? 1.0 : 0.0;
+    const float p3Enabled = p3.x < _ResultWidth && p3.y < _ResultHeight ? 1.0 : 0.0;
+    const float p4Enabled = p4.x < _ResultWidth && p4.y < _ResultHeight ? 1.0 : 0.0;
+    const float p5Enabled = p5.x < _ResultWidth && p5.y < _ResultHeight ? 1.0 : 0.0;
+    const float p6Enabled = p6.x < _ResultWidth && p6.y < _ResultHeight ? 1.0 : 0.0;
+    const float p7Enabled = p7.x < _ResultWidth && p7.y < _ResultHeight ? 1.0 : 0.0;
+    const float p8Enabled = p8.x < _ResultWidth && p8.y < _ResultHeight ? 1.0 : 0.0;
+    
+    float4 color = Result[p0];
+    color += Result[p1] * p1Enabled;
+    color += Result[p2] * p2Enabled;
+    color += Result[p3] * p3Enabled;
+    color += Result[p4] * p4Enabled;
+    color += Result[p5] * p5Enabled;
+    color += Result[p6] * p6Enabled;
+    color += Result[p7] * p7Enabled;
+    color += Result[p8] * p8Enabled;
+    color /= p1Enabled + p2Enabled + p3Enabled + p4Enabled + p5Enabled + p6Enabled + p7Enabled + p8Enabled;
+
+    Result[p0] = color;
+    if (p1Enabled) Result[p1] = color;
+    if (p2Enabled) Result[p2] = color;
+    if (p3Enabled) Result[p3] = color;
+    if (p4Enabled) Result[p4] = color;
+    if (p5Enabled) Result[p5] = color;
+    if (p6Enabled) Result[p6] = color;
+    if (p7Enabled) Result[p7] = color;
+    if (p8Enabled) Result[p8] = color;
+}
