@@ -4,6 +4,7 @@ using UnityEngine;
 public class PixelizeRunner : MonoBehaviour
 {
     public ComputeShader PixelizeComputeShader;
+    [Range(2, 40)] public int BlockSize = 3;
 
     int _screenWidth;
     int _screenHeight;
@@ -35,11 +36,15 @@ public class PixelizeRunner : MonoBehaviour
     {
         Graphics.Blit(src, _renderTexture);
         
-        var mainKernel = PixelizeComputeShader.FindKernel("CSMain");
+        var mainKernel = PixelizeComputeShader.FindKernel("Pixelize");
+        PixelizeComputeShader.SetInt("_BlockSize", BlockSize);
         PixelizeComputeShader.SetFloat("_ResultWidth", _renderTexture.width);
         PixelizeComputeShader.SetFloat("_ResultHeight", _renderTexture.height);
         PixelizeComputeShader.SetTexture(mainKernel, "Result", _renderTexture);
-        PixelizeComputeShader.Dispatch(mainKernel, _renderTexture.width / 3, _renderTexture.height / 3, 1);
+        PixelizeComputeShader.Dispatch(mainKernel, 
+            Mathf.CeilToInt(_renderTexture.width / 3f / 8f),
+            Mathf.CeilToInt(_renderTexture.height / 3f / 8f), 
+            1);
         
         Graphics.Blit(_renderTexture, dest);
     }
