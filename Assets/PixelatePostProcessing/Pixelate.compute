@@ -1,4 +1,4 @@
-#pragma kernel Pixelize
+#pragma kernel Pixelate
 
 RWTexture2D<float4> Result;
 
@@ -7,7 +7,7 @@ int _ResultWidth;
 int _ResultHeight;
 
 [numthreads(8,8,1)]
-void Pixelize (uint3 id : SV_DispatchThreadID)
+void Pixelate (uint3 id : SV_DispatchThreadID)
 {
     if (id.x >= _ResultWidth || id.y >= _ResultHeight)
         return;

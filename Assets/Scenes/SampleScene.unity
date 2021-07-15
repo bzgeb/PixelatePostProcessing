@@ -312,5 +312,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bfc572a1fc809c41b395a2c35bd1647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PixelizeComputeShader: {fileID: 7200000, guid: 8d8ea122f5b940842a1caf4881867a16, type: 3}
+  PixelateComputeShader: {fileID: 7200000, guid: 8d8ea122f5b940842a1caf4881867a16, type: 3}
   BlockSize: 5
