@@ -1,6 +1,6 @@
 #pragma kernel Pixelate
 
-RWTexture2D<float4> Result;
+RWTexture2D<float4> _Result;
 
 int _BlockSize;
 int _ResultWidth;
@@ -27,7 +27,7 @@ void Pixelate (uint3 id : SV_DispatchThreadID)
         for (int j = 0; j < blockHeight; ++j)
         {
             const uint2 pixelPos = uint2(p0.x + i, p0.y + j);
-            color += Result[pixelPos];
+            color += _Result[pixelPos];
         }
     }
     color /= numPixels;
@@ -37,7 +37,7 @@ void Pixelate (uint3 id : SV_DispatchThreadID)
         for (int j = 0; j < blockHeight; ++j)
         {
             const uint2 pixelPos = uint2(p0.x + i, p0.y + j);
-            Result[pixelPos] = color;
+            _Result[pixelPos] = color;
         }
     }
 }
