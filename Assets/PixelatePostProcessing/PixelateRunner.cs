@@ -40,9 +40,10 @@ public class PixelateRunner : MonoBehaviour
         PixelateComputeShader.SetInt("_ResultWidth", _renderTexture.width);
         PixelateComputeShader.SetInt("_ResultHeight", _renderTexture.height);
         PixelateComputeShader.SetTexture(mainKernel, "_Result", _renderTexture);
+        PixelateComputeShader.GetKernelThreadGroupSizes(mainKernel, out uint xGroupSize, out uint yGroupSize, out _);
         PixelateComputeShader.Dispatch(mainKernel,
-            Mathf.CeilToInt(_renderTexture.width / (float)BlockSize / 8f),
-            Mathf.CeilToInt(_renderTexture.height / (float)BlockSize / 8f),
+            Mathf.CeilToInt(_renderTexture.width / (float)BlockSize / xGroupSize),
+            Mathf.CeilToInt(_renderTexture.height / (float)BlockSize / yGroupSize),
             1);
 
         Graphics.Blit(_renderTexture, dest);
