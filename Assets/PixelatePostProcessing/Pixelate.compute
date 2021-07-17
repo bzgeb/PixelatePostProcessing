@@ -12,32 +12,32 @@ void Pixelate (uint3 id : SV_DispatchThreadID)
     if (id.x >= _ResultWidth || id.y >= _ResultHeight)
         return;
 
-    const float2 p0 = id.xy * _BlockSize;
+    const float2 startPos = id.xy * _BlockSize;
     
-    if (p0.x >= _ResultWidth || p0.y >= _ResultHeight)
+    if (startPos.x >= _ResultWidth || startPos.y >= _ResultHeight)
         return;
     
-    const int blockWidth = min(_BlockSize, _ResultWidth - p0.x);
-    const int blockHeight = min(_BlockSize, _ResultHeight - p0.y);
+    const int blockWidth = min(_BlockSize, _ResultWidth - startPos.x);
+    const int blockHeight = min(_BlockSize, _ResultHeight - startPos.y);
     const int numPixels = blockHeight * blockWidth;
     
-    float4 color = float4(0, 0, 0, 0);
+    float4 colour = float4(0, 0, 0, 0);
     for (int i = 0; i < blockWidth; ++i)
     {
         for (int j = 0; j < blockHeight; ++j)
         {
-            const uint2 pixelPos = uint2(p0.x + i, p0.y + j);
-            color += _Result[pixelPos];
+            const uint2 pixelPos = uint2(startPos.x + i, startPos.y + j);
+            colour += _Result[pixelPos];
         }
     }
-    color /= numPixels;
+    colour /= numPixels;
 
     for (int i = 0; i < blockWidth; ++i)
     {
         for (int j = 0; j < blockHeight; ++j)
         {
-            const uint2 pixelPos = uint2(p0.x + i, p0.y + j);
-            _Result[pixelPos] = color;
+            const uint2 pixelPos = uint2(startPos.x + i, startPos.y + j);
+            _Result[pixelPos] = colour;
         }
     }
 }
